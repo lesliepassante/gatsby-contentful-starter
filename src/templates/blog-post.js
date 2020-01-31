@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import Helmet from 'react-helmet'
 import get from 'lodash/get'
 import Img from 'gatsby-image'
@@ -13,11 +13,15 @@ class BlogPostTemplate extends React.Component {
     const siteTitle = get(this.props, 'data.site.siteMetadata.title')
 
     return (
-      <Layout location={this.props.location} >
+      <Layout location={this.props.location}>
         <div style={{ background: '#fff' }}>
           <Helmet title={`${post.title} | ${siteTitle}`} />
           <div className={heroStyles.hero}>
-            <Img className={heroStyles.heroImage} alt={post.title} fluid={post.heroImage.fluid} />
+            <Img
+              className={heroStyles.heroImage}
+              alt={post.title}
+              fluid={post.heroImage.fluid}
+            />
           </div>
           <div className="wrapper">
             <h1 className="section-headline">{post.title}</h1>
@@ -26,7 +30,11 @@ class BlogPostTemplate extends React.Component {
                 display: 'block',
               }}
             >
-              {post.publishDate}
+              By
+              <Link to={`/author/${post.author.slug}/`}>
+                {post.author.name}
+              </Link>
+              , {post.publishDate}
             </p>
             <div
               dangerouslySetInnerHTML={{
@@ -61,6 +69,10 @@ export const pageQuery = graphql`
         childMarkdownRemark {
           html
         }
+      }
+      author {
+        name
+        slug
       }
     }
   }
